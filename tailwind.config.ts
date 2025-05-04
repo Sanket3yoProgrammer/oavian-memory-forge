@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        oavian: {
+          blue: '#1e3a8a',
+          orange: '#f97316',
+          yellow: '#facc15',
+          teal: '#0d9488',
+        }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +91,52 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        'bounce-light': {
+          '0%, 100%': { 
+            transform: 'translateY(0)',
+          },
+          '50%': { 
+            transform: 'translateY(-5px)',
+          }
+        },
+        'float': {
+          '0%, 100%': { 
+            transform: 'translateY(0)',
+          },
+          '50%': { 
+            transform: 'translateY(-10px)',
+          }
+        },
+        'spin-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' }
+        },
+        'bell-ring': {
+          '0%': { transform: 'rotate(0deg)' },
+          '10%, 30%, 50%, 70%': { transform: 'rotate(10deg)' },
+          '20%, 40%, 60%': { transform: 'rotate(-10deg)' },
+          '80%, 100%': { transform: 'rotate(0deg)' }
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.5s ease-out forwards',
+        'bounce-light': 'bounce-light 2s infinite ease-in-out',
+        'float': 'float 3s infinite ease-in-out',
+        'spin-slow': 'spin-slow 8s linear infinite',
+        'bell-ring': 'bell-ring 2s ease-in-out'
 			}
 		}
 	},
