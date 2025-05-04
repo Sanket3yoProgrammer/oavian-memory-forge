@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// Fix: Import OrbitControls with proper type declaration 
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export function SchoolGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,6 +64,20 @@ export function SchoolGlobe() {
         controls.enableZoom = false;
         controls.enablePan = false;
         controls.rotateSpeed = 0.5;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        
+        // Add clouds layer
+        const cloudGeometry = new THREE.SphereGeometry(1.01, 32, 32);
+        const cloudMaterial = new THREE.MeshPhongMaterial({
+          map: new THREE.TextureLoader().load(
+            'https://unpkg.com/three-globe/example/img/earth-clouds.png'
+          ),
+          transparent: true,
+          opacity: 0.4
+        });
+        const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+        scene.add(clouds);
         
         // Add marker for OAV location (assuming it's in Odisha, India)
         // Approximate coordinates for Odisha: 20.9517° N, 85.0985° E
@@ -70,9 +85,46 @@ export function SchoolGlobe() {
         positionMarker(oavMarker, 20.9517, 85.0985);
         scene.add(oavMarker);
         
+        // Add atmospheric glow
+        const glowGeometry = new THREE.SphereGeometry(1.15, 32, 32);
+        const glowMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            c: { type: "f", value: 0.5 },
+            p: { type: "f", value: 3.0 },
+            glowColor: { type: "c", value: new THREE.Color(0x1e3a8a) },
+            viewVector: { type: "v3", value: camera.position }
+          },
+          vertexShader: `
+            uniform vec3 viewVector;
+            uniform float c;
+            uniform float p;
+            varying float intensity;
+            void main() {
+              vec3 vNormal = normalize(normal);
+              vec3 vNormel = normalize(viewVector);
+              intensity = pow(c - dot(vNormal, vNormel), p);
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform vec3 glowColor;
+            varying float intensity;
+            void main() {
+              gl_FragColor = vec4(glowColor, intensity * 0.5);
+            }
+          `,
+          side: THREE.BackSide,
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        });
+        
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        scene.add(glow);
+        
         // Animation loop
         const animate = () => {
-          earth.rotation.y += 0.001;
+          controls.update();
+          clouds.rotation.y += 0.0005;
           renderer.render(scene, camera);
           requestAnimationFrame(animate);
         };
@@ -92,14 +144,21 @@ export function SchoolGlobe() {
         // Create marker for location
         function createLocationMarker() {
           const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
-          // Fix: Changed from MeshBasicMaterial with emissive to MeshPhongMaterial
-          // since emissive is only available in MeshPhongMaterial, MeshStandardMaterial, etc.
+          // Use MeshPhongMaterial with emissive
           const markerMaterial = new THREE.MeshPhongMaterial({ 
             color: 0xff5500,
             emissive: 0xff0000,
             emissiveIntensity: 0.5
           });
-          return new THREE.Mesh(markerGeometry, markerMaterial);
+          
+          // Add pulsing animation to the marker
+          const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+          
+          // Create pulsing light at marker location
+          const pulseLight = new THREE.PointLight(0xff5500, 1, 0.2);
+          marker.add(pulseLight);
+          
+          return marker;
         }
         
         // Position marker on globe by lat/lon
@@ -126,6 +185,10 @@ export function SchoolGlobe() {
           // Dispose resources
           earthGeometry.dispose();
           earthMaterial.dispose();
+          cloudGeometry.dispose();
+          cloudMaterial.dispose();
+          glowGeometry.dispose();
+          glowMaterial.dispose();
           renderer.dispose();
         };
       } catch (error) {
@@ -141,7 +204,7 @@ export function SchoolGlobe() {
   }, []);
   
   return (
-    <Card className="w-full h-[400px] overflow-hidden">
+    <Card className="w-full h-[400px] overflow-hidden rounded-2xl shadow-xl transition-all hover:shadow-2xl">
       <div ref={containerRef} className="w-full h-full" />
     </Card>
   );
