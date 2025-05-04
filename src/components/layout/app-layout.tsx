@@ -4,8 +4,16 @@ import { AppSidebar } from "./app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MusicPlayer } from "@/components/music-player";
+import { useEffect, useState } from "react";
 
 export function AppLayout() {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+  
   return (
     <ThemeProvider defaultTheme="light" storageKey="oavian-theme">
       <SidebarProvider>
@@ -15,7 +23,7 @@ export function AppLayout() {
             <div className="animate-fade-in w-full">
               <Outlet />
             </div>
-            <MusicPlayer />
+            {isMounted && <MusicPlayer />}
           </main>
         </div>
       </SidebarProvider>
