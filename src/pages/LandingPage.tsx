@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { GoogleMap } from '@/components/map/google-map';
-import { ArrowRight, Award, Book, Camera, LogIn, MessageSquare, Music, Users } from 'lucide-react';
+import { 
+  ArrowRight, Award, Book, Camera, ChevronRight, 
+  LogIn, MessageSquare, Music, Users
+} from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -21,11 +24,14 @@ const LandingPage = () => {
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Button variant="ghost" asChild className="hover:bg-primary/5">
+            <Button variant="ghost" asChild className="hover:bg-primary/5 hidden sm:flex">
               <Link to="/auth/login">Sign In</Link>
             </Button>
-            <Button asChild className="bg-gradient-to-r from-oavian-blue to-oavian-orange hover:opacity-90 transition-opacity">
-              <Link to="/auth/register">Join Now</Link>
+            <Button asChild className="bg-gradient-to-r from-oavian-blue to-oavian-orange text-white hover:opacity-90 transition-opacity">
+              <Link to="/auth/register" className="hidden sm:flex">Join Now</Link>
+            </Button>
+            <Button asChild size="icon" variant="outline" className="sm:hidden">
+              <Link to="/auth/login"><LogIn className="h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -56,9 +62,9 @@ const LandingPage = () => {
               Your ultimate digital yearbook to preserve and cherish all your school memories from Odisha Adarsha Vidyalaya.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" asChild className="bg-gradient-to-r from-oavian-blue to-oavian-orange hover:opacity-90 transition-all hover:shadow-lg">
+              <Button size="lg" asChild className="bg-gradient-to-r from-oavian-blue to-oavian-orange text-white hover:opacity-90 transition-all hover:shadow-lg group">
                 <Link to="/auth/register" className="flex items-center gap-2">
-                  Get Started <ArrowRight className="h-5 w-5" />
+                  Get Started <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild className="border-oavian-blue hover:bg-oavian-blue/5">
@@ -110,12 +116,19 @@ const LandingPage = () => {
                 description: "Stay connected with your classmates through chat."
               },
             ].map((feature, index) => (
-              <div key={index} className="bg-white/50 dark:bg-white/5 backdrop-blur-sm border border-border rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1 group">
+              <div 
+                key={index} 
+                className="bg-white/50 dark:bg-white/5 backdrop-blur-sm border border-border rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1 group animate-fade-in" 
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <div className="h-12 w-12 rounded-full bg-gradient-to-br from-oavian-blue to-oavian-orange flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-bold text-xl mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
+                <div className="mt-4 flex items-center text-sm text-primary font-medium group-hover:translate-x-1 transition-transform">
+                  <span>Explore</span> <ChevronRight className="h-4 w-4 ml-1" />
+                </div>
               </div>
             ))}
           </div>
@@ -133,7 +146,7 @@ const LandingPage = () => {
           </div>
           
           <div className="max-w-4xl mx-auto">
-            <GoogleMap />
+            <GoogleMap className="shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] transition-shadow duration-500" />
           </div>
         </div>
       </section>
@@ -145,9 +158,9 @@ const LandingPage = () => {
           <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
             Don't miss out on reconnecting with your classmates and preserving your precious school memories.
           </p>
-          <Button size="lg" variant="secondary" asChild className="bg-white text-oavian-blue hover:bg-white/90">
+          <Button size="lg" variant="secondary" asChild className="bg-white text-oavian-blue hover:bg-white/90 group">
             <Link to="/auth/register" className="flex items-center gap-2">
-              <LogIn className="h-5 w-5" /> Join Now
+              <LogIn className="h-5 w-5 group-hover:translate-x-1 transition-transform" /> Join Now
             </Link>
           </Button>
         </div>
@@ -169,8 +182,8 @@ const LandingPage = () => {
               <p className="text-sm text-muted-foreground">
                 &copy; {new Date().getFullYear()} Oavian Memories. All rights reserved.
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Made with 💙 by sanket3yoprogrammer
+              <p className="text-xs text-muted-foreground mt-1 flex items-center justify-center md:justify-end">
+                Made with <span className="text-red-500 mx-1">❤️</span> by sanket3yoprogrammer
               </p>
             </div>
           </div>

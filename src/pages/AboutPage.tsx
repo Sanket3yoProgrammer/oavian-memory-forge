@@ -2,7 +2,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Award, BookOpen, Landmark, Users } from 'lucide-react';
-import { SchoolGlobe } from '@/components/globe/school-globe';
+import { GoogleMap } from '@/components/map/google-map';
 
 const AboutPage = () => {
   return (
@@ -147,7 +147,7 @@ const AboutPage = () => {
                     OAV is located in the heart of Odisha, providing a serene and conducive 
                     environment for learning and growth.
                   </p>
-                  <SchoolGlobe />
+                  <GoogleMap />
                 </CardContent>
               </Card>
             </div>

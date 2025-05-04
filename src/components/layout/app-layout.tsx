@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { AppSidebar } from "./app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { MusicPlayer } from "@/components/music-player";
 
 export function AppLayout() {
   return (
@@ -14,6 +15,7 @@ export function AppLayout() {
             <div className="animate-fade-in w-full">
               <Outlet />
             </div>
+            <MusicPlayer />
           </main>
         </div>
       </SidebarProvider>
