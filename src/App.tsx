@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,9 @@ const MemoriesPage = lazy(() => import('./pages/MemoriesPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 const FriendsPage = lazy(() => import('./pages/FriendsPage'));
 const MusicPage = lazy(() => import('./pages/MusicPage'));
+
+// Import the AdminDashboard
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +55,9 @@ const App = () => (
               {/* Fallback routes */}
               <Route path="/index" element={<Navigate to="/" replace />} />
               <Route path="*" element={<NotFound />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

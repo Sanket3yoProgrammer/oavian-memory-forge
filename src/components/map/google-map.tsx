@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/use-toast';
 
+// Adding proper type declarations for Google Maps
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
+
 interface GoogleMapProps {
   className?: string;
   location?: { lat: number; lng: number };
@@ -25,7 +32,7 @@ export function GoogleMap({
   
   // Function to initialize the map once the script is loaded
   const initializeMap = () => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !window.google || !window.google.maps) return;
     
     try {
       // Create the map
@@ -181,7 +188,7 @@ export function GoogleMap({
       const googleMapsApiKey = 'AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg';
       
       // Don't load script if it's already loaded
-      if (document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+      if (window.google && window.google.maps) {
         setMapScriptLoaded(true);
         return;
       }
@@ -204,7 +211,7 @@ export function GoogleMap({
         toast({
           variant: "destructive", 
           title: "Map Error",
-          description: "Failed to load Google Maps. Please try again later."
+          description: "Failed to load Google Maps. Please check your internet connection."
         });
       };
       
@@ -221,7 +228,6 @@ export function GoogleMap({
     return () => {
       // Clean up map instance if exists
       if (mapInstanceRef.current) {
-        // Note: Google Maps doesn't have an explicit destroy method
         mapInstanceRef.current = null;
       }
     };
@@ -240,7 +246,7 @@ export function GoogleMap({
   }, [mapScriptLoaded, location, zoom]);
   
   return (
-    <Card className={`w-full overflow-hidden rounded-2xl shadow-xl transition-all hover:shadow-2xl ${className}`} style={{ height }}>
+    <Card className={`w-full overflow-hidden rounded-2xl shadow-xl transition-all hover:shadow-2xl ${className} dark:bg-sidebar-background`} style={{ height }}>
       {isLoading && (
         <div className="w-full h-full flex items-center justify-center bg-muted/20">
           <div className="space-y-4 w-full px-8">
@@ -271,11 +277,4 @@ export function GoogleMap({
       />
     </Card>
   );
-}
-
-// Add Google Maps types
-declare global {
-  interface Window {
-    google: any;
-  }
 }

@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { 
-  Album, Bell, Home, Image, Landmark, LogIn, Music, Search, Settings, User, Users 
+  Album, Bell, Home, Image, Landmark, LogIn, Music, Search, Settings, User, Users, PieChart 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -30,6 +30,10 @@ export function AppSidebar() {
     { icon: Music, label: "Music", path: "/music" },
     { icon: Bell, label: "Notifications", path: "/notifications" },
     { icon: Landmark, label: "About OAV", path: "/about" },
+  ];
+
+  const adminItems = [
+    { icon: PieChart, label: "Admin Dashboard", path: "/admin" },
   ];
 
   const accountItems = [
@@ -71,7 +75,31 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
                     <Link to={item.path} className={cn(
-                      "flex items-center gap-3 relative overflow-hidden",
+                      "flex items-center gap-3 relative overflow-hidden focus-ring",
+                      isActive(item.path) && "after:absolute after:content-[''] after:w-1 after:h-full after:rounded-r-md after:bg-gradient-to-b after:from-oavian-blue after:to-oavian-orange after:left-0 after:top-0"
+                    )}>
+                      <item.icon className={cn(
+                        "h-5 w-5 transition-transform",
+                        isActive(item.path) ? "text-sidebar-accent-foreground" : "text-sidebar-foreground/70"
+                      )} />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Administration</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adminItems.map((item) => (
+                <SidebarMenuItem key={item.path}>
+                  <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
+                    <Link to={item.path} className={cn(
+                      "flex items-center gap-3 relative overflow-hidden focus-ring",
                       isActive(item.path) && "after:absolute after:content-[''] after:w-1 after:h-full after:rounded-r-md after:bg-gradient-to-b after:from-oavian-blue after:to-oavian-orange after:left-0 after:top-0"
                     )}>
                       <item.icon className={cn(
@@ -95,7 +123,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
                     <Link to={item.path} className={cn(
-                      "flex items-center gap-3 relative overflow-hidden",
+                      "flex items-center gap-3 relative overflow-hidden focus-ring",
                       isActive(item.path) && "after:absolute after:content-[''] after:w-1 after:h-full after:rounded-r-md after:bg-gradient-to-b after:from-oavian-blue after:to-oavian-orange after:left-0 after:top-0"
                     )}>
                       <item.icon className={cn(
@@ -116,7 +144,7 @@ export function AppSidebar() {
         <Link 
           to="/auth/login" 
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-md w-full",
+            "flex items-center justify-center gap-2 px-4 py-2 rounded-md w-full",
             "bg-gradient-to-r from-oavian-blue to-oavian-orange text-white hover:opacity-90 transition-opacity"
           )}
         >
@@ -124,7 +152,7 @@ export function AppSidebar() {
           <span>Sign In</span>
         </Link>
         <div className="mt-4 text-xs text-center text-muted-foreground">
-          Made with 💙 by sanket3yoprogrammer
+          Made with ❤️ by sanket3yoprogrammer
         </div>
       </SidebarFooter>
     </Sidebar>
