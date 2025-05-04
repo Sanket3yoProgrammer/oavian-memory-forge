@@ -70,8 +70,8 @@ const HomePage = () => {
     <div className="min-h-screen p-6">
       <MusicPlayer />
       
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Welcome back, Oavian!</h1>
+      <div className="mb-6 animate-fade-in">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-oavian-blue to-oavian-orange bg-clip-text text-transparent">Welcome back, Oavian!</h1>
         <p className="text-muted-foreground">Let's explore your school memories</p>
       </div>
       
@@ -81,34 +81,34 @@ const HomePage = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
-              { title: 'Memories', value: '124', color: 'bg-oavian-orange/10 text-oavian-orange' },
-              { title: 'Friends', value: '56', color: 'bg-oavian-blue/10 text-oavian-blue' },
-              { title: 'Albums', value: '8', color: 'bg-oavian-teal/10 text-oavian-teal' }
+              { title: 'Memories', value: '124', color: 'bg-gradient-to-br from-oavian-orange to-oavian-yellow text-white' },
+              { title: 'Friends', value: '56', color: 'bg-gradient-to-br from-oavian-blue to-oavian-teal text-white' },
+              { title: 'Albums', value: '8', color: 'bg-gradient-to-br from-oavian-teal to-oavian-blue text-white' }
             ].map((stat, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className={`text-sm font-medium ${stat.color} inline-block px-2 py-1 rounded-md mb-2`}>
+              <Card key={index} className="overflow-hidden border-none shadow-md hover:shadow-lg transition-shadow">
+                <div className={`${stat.color} p-6`}>
+                  <div className="text-sm font-medium text-white/90 mb-2">
                     {stat.title}
                   </div>
                   <div className="text-3xl font-bold">{stat.value}</div>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
           
           {/* Recent Memories */}
-          <div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-xl font-bold mb-4">Recent Memories</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {recentMemories.map(memory => (
-                <div key={memory.id} className="memory-card group">
+              {recentMemories.map((memory, index) => (
+                <div key={memory.id} className="memory-card group animate-fade-in" style={{ animationDelay: `${0.3 + (index * 0.1)}s` }}>
                   <div className="aspect-video relative overflow-hidden">
                     <img 
                       src={memory.image} 
                       alt={memory.title}
                       className="w-full h-full object-cover transition-transform group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
                       <div className="p-3">
                         <h3 className="text-white font-medium">{memory.title}</h3>
                         <p className="text-white/70 text-sm">{memory.date}</p>
@@ -118,15 +118,15 @@ const HomePage = () => {
                   <div className="p-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1">
-                        <ThumbsUp className="h-4 w-4 text-muted-foreground" />
+                        <ThumbsUp className="h-4 w-4 text-oavian-blue" />
                         <span className="text-sm">{memory.likes}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                        <MessageSquare className="h-4 w-4 text-oavian-orange" />
                         <span className="text-sm">{memory.comments}</span>
                       </div>
                     </div>
-                    <Badge variant="outline" className="text-xs">{memory.date}</Badge>
+                    <Badge variant="outline" className="text-xs bg-muted/50">{memory.date}</Badge>
                   </div>
                 </div>
               ))}
@@ -135,19 +135,21 @@ const HomePage = () => {
         </div>
         
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           {/* Notifications */}
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Notifications</h2>
-                <Badge className="bg-oavian-orange">{notifications.length}</Badge>
+          <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+            <div className="bg-gradient-to-r from-oavian-blue to-oavian-teal p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-bold text-white">Notifications</h2>
+                <Badge className="bg-white text-oavian-blue">{notifications.length}</Badge>
               </div>
+            </div>
+            <CardContent className="p-4">
               <div className="space-y-4">
-                {notifications.map(notification => (
-                  <div key={notification.id} className="flex gap-3 items-start">
-                    <div className="bg-muted rounded-full p-2">
-                      <Bell className="h-4 w-4" />
+                {notifications.map((notification) => (
+                  <div key={notification.id} className="flex gap-3 items-start hover:bg-muted/30 p-2 rounded-md transition-colors">
+                    <div className="bg-gradient-to-br from-oavian-blue to-oavian-orange rounded-full p-2">
+                      <Bell className="h-4 w-4 text-white" />
                     </div>
                     <div>
                       <p className="text-sm">{notification.message}</p>
@@ -160,12 +162,14 @@ const HomePage = () => {
           </Card>
           
           {/* Upcoming Events */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
+          <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+            <div className="bg-gradient-to-r from-oavian-orange to-oavian-yellow p-4">
+              <h2 className="text-xl font-bold text-white">Upcoming Events</h2>
+            </div>
+            <CardContent className="p-4">
               <div className="space-y-4">
-                {upcomingEvents.map(event => (
-                  <div key={event.id} className="border-l-2 border-primary pl-4">
+                {upcomingEvents.map((event) => (
+                  <div key={event.id} className="border-l-2 border-oavian-orange pl-4 hover:bg-muted/30 p-2 rounded-r-md transition-colors">
                     <h3 className="font-medium">{event.title}</h3>
                     <p className="text-sm text-muted-foreground">{event.date}</p>
                     <p className="text-xs text-muted-foreground">{event.location}</p>
@@ -176,10 +180,12 @@ const HomePage = () => {
           </Card>
           
           {/* Quick Links */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Quick Links</h2>
-              <div className="space-y-2">
+          <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+            <div className="bg-gradient-to-r from-oavian-teal to-oavian-blue p-4">
+              <h2 className="text-xl font-bold text-white">Quick Links</h2>
+            </div>
+            <CardContent className="p-4">
+              <div className="space-y-1">
                 {[
                   'Upload Photos',
                   'Create Album',
@@ -187,7 +193,8 @@ const HomePage = () => {
                   'View Timeline',
                   'Vote in Polls'
                 ].map((link, index) => (
-                  <div key={index} className="p-2 hover:bg-muted rounded-md cursor-pointer">
+                  <div key={index} className="p-2 hover:bg-muted rounded-md cursor-pointer transition-colors flex items-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-oavian-blue to-oavian-orange mr-2"></div>
                     {link}
                   </div>
                 ))}

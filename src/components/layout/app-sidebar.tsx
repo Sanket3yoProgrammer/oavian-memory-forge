@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { 
   Album, Bell, Home, Image, Landmark, LogIn, Music, Search, Settings, User, Users 
 } from "lucide-react";
@@ -20,8 +20,10 @@ import {
 } from "@/components/ui/sidebar";
 
 export function AppSidebar() {
+  const location = useLocation();
+  
   const menuItems = [
-    { icon: Home, label: "Home", path: "/" },
+    { icon: Home, label: "Home", path: "/home" },
     { icon: Album, label: "Memories", path: "/memories" },
     { icon: Image, label: "Gallery", path: "/gallery" },
     { icon: Users, label: "Friends", path: "/friends" },
@@ -35,6 +37,10 @@ export function AppSidebar() {
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
@@ -44,7 +50,9 @@ export function AppSidebar() {
             alt="OAV Logo" 
             className="h-8 w-8"
           />
-          <span className="text-lg font-bold">Oavian Memories</span>
+          <span className="text-lg font-bold bg-gradient-to-r from-oavian-blue to-oavian-orange bg-clip-text text-transparent">
+            Oavian Memories
+          </span>
         </div>
         <div className="flex items-center mt-2">
           <div className="flex-1">
@@ -61,9 +69,15 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+                  <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
+                    <Link to={item.path} className={cn(
+                      "flex items-center gap-3 relative overflow-hidden",
+                      isActive(item.path) && "after:absolute after:content-[''] after:w-1 after:h-full after:rounded-r-md after:bg-gradient-to-b after:from-oavian-blue after:to-oavian-orange after:left-0 after:top-0"
+                    )}>
+                      <item.icon className={cn(
+                        "h-5 w-5 transition-transform",
+                        isActive(item.path) ? "text-sidebar-accent-foreground" : "text-sidebar-foreground/70"
+                      )} />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -79,9 +93,15 @@ export function AppSidebar() {
             <SidebarMenu>
               {accountItems.map((item) => (
                 <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+                  <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
+                    <Link to={item.path} className={cn(
+                      "flex items-center gap-3 relative overflow-hidden",
+                      isActive(item.path) && "after:absolute after:content-[''] after:w-1 after:h-full after:rounded-r-md after:bg-gradient-to-b after:from-oavian-blue after:to-oavian-orange after:left-0 after:top-0"
+                    )}>
+                      <item.icon className={cn(
+                        "h-5 w-5 transition-transform",
+                        isActive(item.path) ? "text-sidebar-accent-foreground" : "text-sidebar-foreground/70"
+                      )} />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -97,14 +117,14 @@ export function AppSidebar() {
           to="/auth/login" 
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-md w-full",
-            "bg-primary text-primary-foreground hover:bg-primary/90"
+            "bg-gradient-to-r from-oavian-blue to-oavian-orange text-white hover:opacity-90 transition-opacity"
           )}
         >
           <LogIn className="h-4 w-4" />
           <span>Sign In</span>
         </Link>
         <div className="mt-4 text-xs text-center text-muted-foreground">
-          Once an Oavian, Always an Oavian
+          Made with 💙 by sanket3yoprogrammer
         </div>
       </SidebarFooter>
     </Sidebar>
