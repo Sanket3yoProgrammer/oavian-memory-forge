@@ -1,6 +1,8 @@
 
 import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export function SchoolGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,10 +14,6 @@ export function SchoolGlobe() {
     
     const loadGlobe = async () => {
       try {
-        // Dynamically import Three.js only when the component is mounted
-        const THREE = await import('three');
-        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls');
-        
         // Create scene, camera and renderer
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xf8f9fa);
@@ -94,7 +92,9 @@ export function SchoolGlobe() {
         // Create marker for location
         function createLocationMarker() {
           const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
-          const markerMaterial = new THREE.MeshBasicMaterial({ 
+          // Fix: Changed from MeshBasicMaterial with emissive to MeshPhongMaterial
+          // since emissive is only available in MeshPhongMaterial, MeshStandardMaterial, etc.
+          const markerMaterial = new THREE.MeshPhongMaterial({ 
             color: 0xff5500,
             emissive: 0xff0000,
             emissiveIntensity: 0.5
